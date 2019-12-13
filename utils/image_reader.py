@@ -228,7 +228,7 @@ class ImageReader(object):
 
 
         self.image_list, self.label_list = read_labeled_image_list(self.data_dir, self.data_list)
-        self.edge_list = read_edge_list(self.data_dir, self.data_id_list)
+        self.edge_list = self.label_list
         self.images = tf.convert_to_tensor(self.image_list, dtype=tf.string)
         self.labels = tf.convert_to_tensor(self.label_list, dtype=tf.string)
         self.edges = tf.convert_to_tensor(self.edge_list, dtype=tf.string)
