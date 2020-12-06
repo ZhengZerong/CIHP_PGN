@@ -227,16 +227,19 @@ def main(in_dir, out_dir):
         img_split = image_list[step].split('/')
         img_id = img_split[-1][:-4]
 
-        msk = decode_labels(parsing_, num_classes=N_CLASSES)
-        parsing_im = Image.fromarray(msk[0])
-        parsing_im.save('{}/{}_vis.png'.format(parsing_dir, img_id))
+        # msk = decode_labels(parsing_, num_classes=N_CLASSES)
+        # parsing_im = Image.fromarray(msk[0])
+        # parsing_im.save('{}/{}_vis.png'.format(parsing_dir, img_id))
+        parsing_ = parsing_[0, :, :, 0]
+        msk_ = np.ones_like(parsing_, dtype=np.uint8)
+        msk_[np.where(parsing_ == 0)] = 0
         cv2.imwrite('{}/{}.png'.format(parsing_dir, img_id),
-                    parsing_[0, :, :, 0])
-        sio.savemat('{}/{}.mat'.format(parsing_dir, img_id),
-                    {'data': scores[0, :, :]})
+                    msk_*255)
+        # sio.savemat('{}/{}.mat'.format(parsing_dir, img_id),
+        #             {'data': scores[0, :, :]})
 
-        cv2.imwrite('{}/{}.png'.format(edge_dir, img_id),
-                    edge_[0, :, :, 0] * 255)
+        # cv2.imwrite('{}/{}.png'.format(edge_dir, img_id),
+        #             edge_[0, :, :, 0] * 255)
 
     # res_mIou = mIoU.eval(session=sess)
     # res_macc = macc.eval(session=sess)
